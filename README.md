@@ -32,10 +32,11 @@ The only requirements for this library are PHP compiled with OpenSSL support, an
 The code supplied here is covered under the MIT Open Source License.
 
 
-
-  [1]: https://php.net/openssl
-  [2]: https://code.google.com/p/android-market-license-verification/
-  [3]: hhttp://developer.android.com/guide/google/play/billing/index.html
-  [4]: https://developers.google.com/android-publisher/api-ref/purchases/products/get
+  [1]: https://img.shields.io/badge/Twitter-@Teocci-blue.svg?style=flat
+  [2]: http://twitter.com/teocci
+  [3]: https://php.net/openssl
+  [4]: https://code.google.com/p/android-market-license-verification/
+  [5]: hhttp://developer.android.com/guide/google/play/billing/index.html
+  [6]: https://developers.google.com/android-publisher/api-ref/purchases/products/get
 
 
