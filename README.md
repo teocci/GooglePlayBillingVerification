@@ -22,11 +22,11 @@ GET https://www.googleapis.com/androidpublisher/v3/applications/packageName/purc
 
 To set up your server-side Android in-app-billing correctly, you must provide the public key string as a file from your Developer Console account.
 
-**Reference:** <a href="https://developer.android.com/google/play/billing/billing_integrate.html#billing-security">Implementing In-app Billing</a>
+**Reference:** [Implementing In-app Billing](7)
 
-Once you copy the public key string from the Developer Console account for your application, you simply need to copy and paste it to a file and name it `iap-live` as shown in the example above.
+Once you copy the public key string from the Developer Console account for your application, you simply need to copy and paste it to a defined constant `PUBLIC_KEY` in the `samples/verify.php` file
 
-**NOTE:** The public key string you copy from the Developer Console account is actually a base64 string. You do NOT have to convert this to anything yourself. The module converts it to the public key automatically for you.
+**NOTE:** The public key string you copy from the Developer Console account is actually a base64 string. You do **NOT** have to convert this to anything yourself. The module converts it to the public key automatically for you.
 
 ### Google Play Store API
 
@@ -44,7 +44,7 @@ To check expiration date or auto renewal status of an Android subscription, you 
 8. Choose `OAuth Client ID`
 9. Choose `Web Application`
  * Give it a name, skip the `Authorized JS origins`
- * Aadd this to `Authorized Redirect URIs`: https://developers.google.com/oauthplayground
+ * Add this to `Authorized Redirect URIs`: https://developers.google.com/oauthplayground
  * Hit Save and copy the **clientID** and **clientSecret** somewhere safe.
 
 ##### Part 2 - Get Access and Refresh Tokens
@@ -85,5 +85,6 @@ The code supplied here is covered under the MIT Open Source License.
   [4]: https://code.google.com/p/android-market-license-verification/
   [5]: hhttp://developer.android.com/guide/google/play/billing/index.html
   [6]: https://developers.google.com/android-publisher/api-ref/purchases/products/get
+  [7]: https://developer.android.com/google/play/billing/billing_integrate.html#billing-security
 
 
