@@ -109,3 +109,14 @@ crashlytics.properties
 crashlytics-build.properties
 fabric.properties
 /samples/googleapi.json
+/samples/Google Play Android Developer-621b310388cd.json
+/samples/google_service.json
+/samples/google_api.json
+### Composer template
+composer.phar
+/vendor/
+
+# Commit your application's lock file http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file
+# You may choose to ignore a library lock file http://getcomposer.org/doc/02-libraries.md#lock-file
+composer.lock
+/samples/token.json

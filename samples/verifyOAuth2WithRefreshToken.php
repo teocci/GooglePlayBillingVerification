@@ -39,7 +39,7 @@ $client->setScopes($scope);
 // Incremental authorization
 $client->setIncludeGrantedScopes(true);
 
-// Allow access to Google API when the user is not present. 
+// Allow access to Google API when the user is not present.
 $client->setAccessType('offline');
 
 if (isset($_SESSION['access_token']) && $_SESSION['access_token']) {
@@ -66,34 +66,4 @@ function validate($client)
     } catch (Exception $e) {
         echo 'got error = ' . $e->getMessage() . PHP_EOL;
     }
-
-}
-
-function getUrlContent($url)
-{
-    $name = 'xxxx';
-    $ip = 'xxxx';
-
-    $data = array(
-        'name' => $name,
-        'ip' => $ip,
-        'text' => "text"
-    );
-
-    $ch = curl_init();
-    curl_setopt($ch, CURLOPT_URL, $url);
-    curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; .NET CLR 1.1.4322)');
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-    curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
-    curl_setopt($ch, CURLOPT_TIMEOUT, 5);
-    curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
-    curl_setopt($ch, CURLOPT_POST, 1);
-    curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data));
-    $data = curl_exec($ch);
-    $responseCode = curl_getinfo($ch);
-    curl_close($ch);
-    echo '$responseCode: ' . PHP_EOL;
-    print_r($responseCode);
-
-    return ($responseCode >= 200 && $responseCode < 300) ? $data : false;
 }

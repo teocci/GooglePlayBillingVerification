@@ -1,6 +1,9 @@
 <?php
 
 namespace ReceiptValidator\GooglePlay;
+use ReceiptValidator\GooglePlay\Model\PurchaseResponse;
+use ReceiptValidator\GooglePlay\Model\SubscriptionResponse;
+
 /**
  * Created by IntelliJ IDEA.
  * User: teocci

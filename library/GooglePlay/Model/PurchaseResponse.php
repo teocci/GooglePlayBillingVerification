@@ -1,6 +1,6 @@
 <?php
 
-namespace ReceiptValidator\GooglePlay;
+namespace ReceiptValidator\GooglePlay\Model;
 /**
  * Created by IntelliJ IDEA.
  * User: teocci

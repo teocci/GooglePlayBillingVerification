@@ -28,13 +28,16 @@ use ReceiptValidator\GooglePlay\Validator as Validator;
 // google authentication
 $applicationName = 'xxxxxx';
 $configLocation = 'google_api.json';
-$refreshToken = ['xxxxxx'];
+$tokenLocation = 'token.json';
 $scope = [Google_Service_AndroidPublisher::ANDROIDPUBLISHER];
+$redirectURL = getRedirectUri();
+
 
 $client = new \Google_Client();
 $client->setApplicationName($applicationName);
 $client->setAuthConfig($configLocation);
 $client->setScopes($scope);
+$client->setRedirectUri($redirectURL);
 
 // Incremental authorization
 $client->setIncludeGrantedScopes(true);
@@ -42,11 +45,43 @@ $client->setIncludeGrantedScopes(true);
 // Allow access to Google API when the user is not present. 
 $client->setAccessType('offline');
 
-if (isset($_SESSION['access_token']) && $_SESSION['access_token']) {
-    validate($client);
-} else {
-    $client->fetchAccessTokenWithRefreshToken($refreshToken);
-    $_SESSION['access_token'] = $client->getAccessToken();
+if (isset($_GET['code']) && !empty($_GET['code'])) {
+    try {
+        // Exchange the one-time authorization code for an access token
+        $accessToken = $client->fetchAccessTokenWithAuthCode($_GET['code']);
+
+        // Save the access token and refresh token in local filesystem
+        file_put_contents($tokenLocation, json_encode($accessToken));
+
+        $_SESSION['accessToken'] = $accessToken;
+        header('Location: ' . filter_var($redirectURL, FILTER_SANITIZE_URL));
+        exit();
+    } catch (\Google_Service_Exception $e) {
+        print_r($e);
+    }
+}
+
+if (!isset($_SESSION['accessToken'])) {
+    $token = @file_get_contents($tokenLocation);
+    if ($token == null) {
+        // Generate a URL to request access from Google's OAuth 2.0 server:
+        $authUrl = $client->createAuthUrl();
+
+        // Redirect the user to Google's OAuth server
+        header('Location: ' . filter_var($authUrl, FILTER_SANITIZE_URL));
+        exit();
+    } else {
+        $_SESSION['accessToken'] = json_decode($token, true);
+    }
+}
+
+$client->setAccessToken($_SESSION['accessToken']);
+
+/* Refresh token when expired */
+if ($client->isAccessTokenExpired()) {
+    // the new access token comes with a refresh token as well
+    $client->fetchAccessTokenWithRefreshToken($client->getRefreshToken());
+    file_put_contents($tokenLocation, json_encode($client->getAccessToken()));
 }
 
 validate($client);
@@ -66,34 +101,4 @@ function validate($client)
     } catch (Exception $e) {
         echo 'got error = ' . $e->getMessage() . PHP_EOL;
     }
-
-}
-
-function getUrlContent($url)
-{
-    $name = 'xxxx';
-    $ip = 'xxxx';
-
-    $data = array(
-        'name' => $name,
-        'ip' => $ip,
-        'text' => "text"
-    );
-
-    $ch = curl_init();
-    curl_setopt($ch, CURLOPT_URL, $url);
-    curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; .NET CLR 1.1.4322)');
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-    curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
-    curl_setopt($ch, CURLOPT_TIMEOUT, 5);
-    curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
-    curl_setopt($ch, CURLOPT_POST, 1);
-    curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data));
-    $data = curl_exec($ch);
-    $responseCode = curl_getinfo($ch);
-    curl_close($ch);
-    echo '$responseCode: ' . PHP_EOL;
-    print_r($responseCode);
-
-    return ($responseCode >= 200 && $responseCode < 300) ? $data : false;
 }
